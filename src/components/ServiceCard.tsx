@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 interface ServiceCardProps {
   title: string;
@@ -9,14 +9,45 @@ interface ServiceCardProps {
 }
 
 const ServiceCard: React.FC<ServiceCardProps> = ({ title, description, icon, isRTL = false }) => {
+  const [isVisible, setIsVisible] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.unobserve(entry.target);
+        }
+      },
+      {
+        threshold: 0.1,
+      }
+    );
+
+    if (cardRef.current) {
+      observer.observe(cardRef.current);
+    }
+
+    return () => {
+      if (cardRef.current) {
+        observer.unobserve(cardRef.current);
+      }
+    };
+  }, []);
+
   return (
     <div 
-      className="bg-white p-6 rounded-lg shadow-lg elegant-shadow hover:shadow-xl transition-shadow duration-300 h-full"
+      ref={cardRef}
+      className={`bg-white p-6 md:p-7 rounded-lg shadow-lg elegant-shadow hover:shadow-xl transition-all duration-500 h-full transform ${
+        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+      }`}
+      style={{ transitionDelay: '100ms' }}
       itemScope 
       itemType="https://schema.org/Service"
     >
       <div className={`flex flex-col ${isRTL ? 'items-end text-right' : 'items-start text-left'}`}>
-        <div className="mb-4 text-gold">
+        <div className="mb-4 text-gold transform transition-transform duration-300 hover:scale-110">
           {icon}
         </div>
         <h3 

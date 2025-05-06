@@ -18,6 +18,7 @@ import NotFound from "./pages/NotFound";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import WhatsAppButton from "./components/WhatsAppButton";
+import BackToTopButton from "./components/BackToTopButton";
 
 // Context
 import { LanguageProvider } from "./context/LanguageContext";
@@ -45,6 +46,7 @@ const App = () => (
           </main>
           <Footer />
           <WhatsAppButton />
+          <BackToTopButton />
         </BrowserRouter>
       </LanguageProvider>
     </TooltipProvider>
