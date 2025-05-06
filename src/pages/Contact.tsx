@@ -118,7 +118,7 @@ const Contact = () => {
                     >
                       <path 
                         strokeLinecap="round" 
-                        strokeLinejoin="roun" 
+                        strokeLinejoin="round" 
                         strokeWidth={2} 
                         d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" 
                       />
@@ -129,10 +129,10 @@ const Contact = () => {
                       {isRTL ? 'البريد الإلكتروني' : 'Email'}
                     </h3>
                     <p className="text-gray-600">
-                      {isRTL ? 'استفسارات عامة' : 'General Inquiries'}: info@luxurychandeliers.com
+                      {isRTL ? 'استفسارات عامة' : 'General Inquiries'}: info@hibateast.com
                     </p>
                     <p className="text-gray-600">
-                      {isRTL ? 'خدمة العملاء' : 'Customer Support'}: support@luxurychandeliers.com
+                      {isRTL ? 'خدمة العملاء' : 'Customer Support'}: support@hibateast.com
                     </p>
                   </div>
                 </div>

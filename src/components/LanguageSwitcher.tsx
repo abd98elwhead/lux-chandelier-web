@@ -10,14 +10,19 @@ const LanguageSwitcher: React.FC = () => {
     setLanguage(language === 'en' ? 'ar' : 'en');
   };
 
+  const buttonText = language === 'en' ? 'العربية' : 'English';
+  const ariaLabel = language === 'en' ? 'Switch to Arabic language' : 'التبديل إلى اللغة الإنجليزية';
+
   return (
     <Button 
       onClick={toggleLanguage} 
       variant="outline" 
       size="sm"
       className="bg-transparent border-gold text-gold hover:bg-gold hover:text-white transition-colors duration-300"
+      aria-label={ariaLabel}
+      title={language === 'en' ? 'تغيير اللغة إلى العربية' : 'Change language to English'}
     >
-      {language === 'en' ? 'العربية' : 'English'}
+      {buttonText}
     </Button>
   );
 };
