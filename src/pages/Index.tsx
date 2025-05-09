@@ -353,9 +353,9 @@ const Index = () => {
               </CarouselItem>
             </CarouselContent>
             
-            <div className="hidden md:block">
-              <CarouselPrevious className="left-0 bg-white/80 hover:bg-gold hover:text-white border-none" />
-              <CarouselNext className="right-0 bg-white/80 hover:bg-gold hover:text-white border-none" />
+            <div className="hidden md:flex md:justify-between md:w-full md:absolute md:top-1/2 md:-translate-y-1/2 md:px-4">
+              <CarouselPrevious className="relative -translate-y-1/2 left-0 bg-white/80 hover:bg-gold hover:text-white border-none" />
+              <CarouselNext className="relative -translate-y-1/2 right-0 bg-white/80 hover:bg-gold hover:text-white border-none" />
             </div>
           </Carousel>
 
