@@ -18,7 +18,7 @@ const LanguageSwitcher: React.FC = () => {
       onClick={toggleLanguage} 
       variant="outline" 
       size="sm"
-      className="bg-transparent border-gold text-gold hover:bg-gold hover:text-white transition-colors duration-300 transform hover:scale-105 shadow-sm text-sm md:text-base py-1 px-2 md:px-3"
+      className="bg-transparent border-gold text-gold hover:bg-gold hover:text-white transition-colors duration-300 transform hover:scale-105 shadow-sm text-sm md:text-base py-1.5 px-3 md:px-4 rounded-md"
       aria-label={ariaLabel}
       title={language === 'en' ? 'تغيير اللغة إلى العربية' : 'Change language to English'}
     >

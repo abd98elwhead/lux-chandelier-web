@@ -8,15 +8,17 @@ import { useLanguage } from '../context/LanguageContext';
 import LazyImage from '../components/LazyImage';
 import { useIsMobile } from '../hooks/use-mobile';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import ProductCard from '../components/ProductCard';
+import PartnerSlider from '../components/PartnerSlider';
 
 const Index = () => {
   const { t, isRTL, language } = useLanguage();
   const isMobile = useIsMobile();
   
   // Refs for scroll animations
+  const galleryRef = useRef<HTMLDivElement>(null);
   const partnersRef = useRef<HTMLDivElement>(null);
   const aboutRef = useRef<HTMLDivElement>(null);
-  const galleryRef = useRef<HTMLDivElement>(null);
   const servicesRef = useRef<HTMLDivElement>(null);
   const testimonialsRef = useRef<HTMLDivElement>(null);
   const contactRef = useRef<HTMLDivElement>(null);
@@ -40,7 +42,7 @@ const Index = () => {
     }, observerOptions);
     
     // Observe all section refs
-    [partnersRef, aboutRef, galleryRef, servicesRef, testimonialsRef, contactRef].forEach(ref => {
+    [galleryRef, partnersRef, aboutRef, servicesRef, testimonialsRef, contactRef].forEach(ref => {
       if (ref.current) {
         observer.observe(ref.current);
       }
@@ -73,8 +75,80 @@ const Index = () => {
     <div>
       {/* Hero Section */}
       <HeroSection />
+
+      {/* Gallery Preview Section (Now positioned right after Hero) */}
+      <section className="py-16 md:py-20 bg-gray-50" ref={galleryRef}>
+        <div className="container-custom mx-auto">
+          <div className={`text-center mb-10 md:mb-16 ${isRTL ? 'rtl' : ''}`}>
+            <h2 className={`text-2xl md:text-3xl font-bold text-charcoal mb-3 md:mb-4`}>
+              {t('section-gallery-title')}
+            </h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              {t('section-gallery-subtitle')}
+            </p>
+          </div>
+
+          <Carousel
+            opts={{ loop: true, align: "start" }}
+            className="w-full max-w-5xl mx-auto px-4"
+          >
+            <CarouselContent>
+              {/* Product Cards with prices */}
+              <CarouselItem className="md:basis-1/2 lg:basis-1/3">
+                <ProductCard 
+                  title={isRTL ? "ثريا كريستال فاخرة" : "Luxury Crystal Chandelier"}
+                  price="12,500 SAR"
+                  images={[
+                    "https://images.unsplash.com/photo-1565538420870-da08ff96a207?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+                    "https://images.unsplash.com/photo-1540932239986-30128078f3c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1687&q=80"
+                  ]}
+                  isRTL={isRTL}
+                />
+              </CarouselItem>
+              
+              <CarouselItem className="md:basis-1/2 lg:basis-1/3">
+                <ProductCard 
+                  title={isRTL ? "ثريا كلاسيكية" : "Classic Chandelier"}
+                  price="8,750 SAR"
+                  images={[
+                    "https://images.unsplash.com/photo-1540932239986-30128078f3c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1687&q=80",
+                    "https://images.unsplash.com/photo-1556020685-ae41abfc9365?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80"
+                  ]}
+                  isRTL={isRTL}
+                />
+              </CarouselItem>
+              
+              <CarouselItem className="md:basis-1/2 lg:basis-1/3">
+                <ProductCard 
+                  title={isRTL ? "ثريا مودرن" : "Modern Chandelier"}
+                  price="9,200 SAR"
+                  images={[
+                    "https://images.unsplash.com/photo-1556020685-ae41abfc9365?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80",
+                    "https://images.unsplash.com/photo-1565538420870-da08ff96a207?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
+                  ]}
+                  isRTL={isRTL}
+                />
+              </CarouselItem>
+            </CarouselContent>
+            
+            <div className="hidden md:block">
+              <CarouselPrevious className="left-0 bg-white/80 hover:bg-gold hover:text-white border-none" />
+              <CarouselNext className="right-0 bg-white/80 hover:bg-gold hover:text-white border-none" />
+            </div>
+          </Carousel>
+
+          <div className="text-center mt-10">
+            <Link 
+              to="/gallery"
+              className="inline-block bg-transparent border-2 border-gold text-gold px-5 py-2 md:px-6 md:py-3 rounded-md hover:bg-gold hover:text-white transition-colors duration-300"
+            >
+              {isRTL ? 'استكشاف المعرض' : 'Explore Gallery'}
+            </Link>
+          </div>
+        </div>
+      </section>
       
-      {/* Our Partners Section */}
+      {/* Our Partners Section - Updated to match the reference */}
       <section className="py-12 md:py-16 bg-white" ref={partnersRef}>
         <div className="container-custom mx-auto px-4">
           <div className={`text-center mb-8 md:mb-12 ${isRTL ? 'rtl' : ''}`}>
@@ -88,19 +162,7 @@ const Index = () => {
             </p>
           </div>
           
-          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12">
-            {/* Partner logos - placeholder for now */}
-            {[1, 2, 3, 4].map((item) => (
-              <div 
-                key={item}
-                className="w-24 h-24 md:w-32 md:h-32 bg-gray-100 rounded-lg flex items-center justify-center grayscale hover:grayscale-0 transition-all duration-300"
-              >
-                <div className="text-gray-400 text-xl font-semibold">
-                  {isRTL ? `شريك ${item}` : `Partner ${item}`}
-                </div>
-              </div>
-            ))}
-          </div>
+          <PartnerSlider />
         </div>
       </section>
       
@@ -136,72 +198,6 @@ const Index = () => {
                 <div className="absolute -top-5 -left-5 w-16 h-16 md:w-24 md:h-24 border-4 border-gold rounded-lg z-10"></div>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Gallery Preview Section */}
-      <section className="py-16 md:py-20 bg-gray-50" ref={galleryRef}>
-        <div className="container-custom mx-auto">
-          <div className={`text-center mb-10 md:mb-16 ${isRTL ? 'rtl' : ''}`}>
-            <h2 className={`text-2xl md:text-3xl font-bold text-charcoal mb-3 md:mb-4`}>
-              {t('section-gallery-title')}
-            </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              {t('section-gallery-subtitle')}
-            </p>
-          </div>
-
-          <Carousel
-            opts={{ loop: true }}
-            className="w-full max-w-5xl mx-auto px-4"
-          >
-            <CarouselContent>
-              {/* Gallery Images */}
-              <CarouselItem className="md:basis-1/2 lg:basis-1/3">
-                <div className="overflow-hidden rounded-lg shadow-lg group h-48 md:h-64 relative">
-                  <LazyImage 
-                    src="https://images.unsplash.com/photo-1565538420870-da08ff96a207?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" 
-                    alt="Luxury Chandelier 1" 
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  />
-                </div>
-              </CarouselItem>
-              
-              <CarouselItem className="md:basis-1/2 lg:basis-1/3">
-                <div className="overflow-hidden rounded-lg shadow-lg group h-48 md:h-64 relative">
-                  <LazyImage 
-                    src="https://images.unsplash.com/photo-1540932239986-30128078f3c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1687&q=80" 
-                    alt="Luxury Chandelier 2" 
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  />
-                </div>
-              </CarouselItem>
-              
-              <CarouselItem className="md:basis-1/2 lg:basis-1/3">
-                <div className="overflow-hidden rounded-lg shadow-lg group h-48 md:h-64 relative">
-                  <LazyImage 
-                    src="https://images.unsplash.com/photo-1556020685-ae41abfc9365?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80" 
-                    alt="Luxury Chandelier 3" 
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  />
-                </div>
-              </CarouselItem>
-            </CarouselContent>
-            
-            <div className="hidden md:block">
-              <CarouselPrevious className="left-0 bg-white/80 hover:bg-gold hover:text-white border-none" />
-              <CarouselNext className="right-0 bg-white/80 hover:bg-gold hover:text-white border-none" />
-            </div>
-          </Carousel>
-
-          <div className="text-center mt-10">
-            <Link 
-              to="/gallery"
-              className="inline-block bg-transparent border-2 border-gold text-gold px-5 py-2 md:px-6 md:py-3 rounded-md hover:bg-gold hover:text-white transition-colors duration-300"
-            >
-              {isRTL ? 'استكشاف المعرض' : 'Explore Gallery'}
-            </Link>
           </div>
         </div>
       </section>
@@ -261,7 +257,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Testimonials Section */}
+      {/* Testimonials Section - Enhanced with images */}
       <section className="py-16 md:py-20 bg-gray-50" ref={testimonialsRef}>
         <div className="container-custom mx-auto">
           <div className={`text-center mb-10 md:mb-16 ${isRTL ? 'rtl' : ''}`}>
@@ -273,7 +269,7 @@ const Index = () => {
             </p>
           </div>
 
-          <Carousel className="w-full max-w-4xl mx-auto px-4">
+          <Carousel className="w-full max-w-4xl mx-auto px-4" opts={{ loop: true, align: "start", dragFree: true, containScroll: "trimSnaps" }}>
             <CarouselContent>
               {/* Testimonial 1 */}
               <CarouselItem className="md:basis-1/2">
@@ -283,6 +279,7 @@ const Index = () => {
                   text={isRTL 
                     ? "تم تركيب أكثر من 15 ثريا في فندقنا. كانت الجودة استثنائية والخدمة احترافية للغاية. أوصي بشدة بخدماتهم."
                     : "They installed more than 15 chandeliers in our hotel. The quality was exceptional and the service was highly professional. I strongly recommend their services."}
+                  image="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80"
                   isRTL={isRTL}
                 />
               </CarouselItem>
@@ -295,6 +292,7 @@ const Index = () => {
                   text={isRTL 
                     ? "أتعامل معهم في كل مشاريعي. يقدمون ثريات فاخرة بتصاميم فريدة وخدمة تركيب محترفة. شريك موثوق للمشاريع الراقية."
                     : "I work with them on all my projects. They provide luxury chandeliers with unique designs and professional installation service. A trusted partner for upscale projects."}
+                  image="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80"
                   isRTL={isRTL}
                 />
               </CarouselItem>
@@ -307,6 +305,7 @@ const Index = () => {
                   text={isRTL 
                     ? "ثريات استثنائية وخدمة لا مثيل لها. قاموا بتصميم وتركيب الثريات في جميع أنحاء القصر بدقة واحترافية عالية."
                     : "Exceptional chandeliers and unmatched service. They designed and installed chandeliers throughout the palace with precision and high professionalism."}
+                  image="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
                   isRTL={isRTL}
                 />
               </CarouselItem>

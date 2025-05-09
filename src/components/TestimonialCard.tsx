@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { useIsMobile } from '../hooks/use-mobile';
+import LazyImage from './LazyImage';
 
 interface TestimonialCardProps {
   name: string;
@@ -29,16 +30,16 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({
         </div>
         <p className="text-gray-600 mb-4 md:mb-6 text-sm md:text-base">{text}</p>
         <div className={`flex items-center ${isRTL ? 'justify-end' : ''} mt-auto`}>
-          <div className="w-8 h-8 md:w-10 md:h-10 rounded-full overflow-hidden border-2 border-gold">
+          <div className="w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden border-2 border-gold">
             {image ? (
-              <img src={image} alt={name} className="w-full h-full object-cover" />
+              <LazyImage src={image} alt={name} className="w-full h-full object-cover" />
             ) : (
               <div className="w-full h-full flex items-center justify-center bg-gold-light text-gold font-bold">
                 {name.charAt(0)}
               </div>
             )}
           </div>
-          <div className={`${isRTL ? 'mr-2 md:mr-3 ml-0' : 'ml-2 md:ml-3'}`}>
+          <div className={`${isRTL ? 'mr-3 md:mr-4 ml-0' : 'ml-3 md:ml-4'}`}>
             <h4 className="text-charcoal font-semibold text-sm md:text-base">{name}</h4>
             <p className="text-gray-500 text-xs md:text-sm">{role}</p>
           </div>
