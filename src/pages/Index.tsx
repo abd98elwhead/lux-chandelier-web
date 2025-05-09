@@ -1,16 +1,52 @@
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import HeroSection from '../components/HeroSection';
 import ServiceCard from '../components/ServiceCard';
 import TestimonialCard from '../components/TestimonialCard';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
+import LazyImage from '../components/LazyImage';
+import { useIsMobile } from '../hooks/use-mobile';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 
 const Index = () => {
-  const { t, isRTL } = useLanguage();
+  const { t, isRTL, language } = useLanguage();
+  const isMobile = useIsMobile();
+  
+  // Refs for scroll animations
+  const partnersRef = useRef<HTMLDivElement>(null);
+  const aboutRef = useRef<HTMLDivElement>(null);
+  const galleryRef = useRef<HTMLDivElement>(null);
+  const servicesRef = useRef<HTMLDivElement>(null);
+  const testimonialsRef = useRef<HTMLDivElement>(null);
+  const contactRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    
+    // Intersection Observer for scroll animations
+    const observerOptions = {
+      threshold: 0.15,
+      rootMargin: '0px 0px -50px 0px'
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate-reveal');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+    
+    // Observe all section refs
+    [partnersRef, aboutRef, galleryRef, servicesRef, testimonialsRef, contactRef].forEach(ref => {
+      if (ref.current) {
+        observer.observe(ref.current);
+      }
+    });
+    
+    return () => observer.disconnect();
   }, []);
 
   // Service icons
@@ -37,22 +73,154 @@ const Index = () => {
     <div>
       {/* Hero Section */}
       <HeroSection />
+      
+      {/* Our Partners Section */}
+      <section className="py-12 md:py-16 bg-white" ref={partnersRef}>
+        <div className="container-custom mx-auto px-4">
+          <div className={`text-center mb-8 md:mb-12 ${isRTL ? 'rtl' : ''}`}>
+            <h2 className={`text-2xl md:text-3xl font-bold text-charcoal mb-3 transition-opacity duration-700 opacity-0 animate-reveal`}>
+              {isRTL ? 'شركاؤنا واعتماداتنا' : 'Our Partners & Certifications'}
+            </h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              {isRTL 
+                ? 'نفتخر بالعمل مع أفضل الشركات العالمية لتقديم أرقى المنتجات لعملائنا.'
+                : 'We proudly work with the world\'s best companies to deliver the finest products to our customers.'}
+            </p>
+          </div>
+          
+          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12">
+            {/* Partner logos - placeholder for now */}
+            {[1, 2, 3, 4].map((item) => (
+              <div 
+                key={item}
+                className="w-24 h-24 md:w-32 md:h-32 bg-gray-100 rounded-lg flex items-center justify-center grayscale hover:grayscale-0 transition-all duration-300"
+              >
+                <div className="text-gray-400 text-xl font-semibold">
+                  {isRTL ? `شريك ${item}` : `Partner ${item}`}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+      
+      {/* About Section */}
+      <section className="py-16 md:py-20" ref={aboutRef}>
+        <div className="container-custom mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-center">
+            <div className={`${isRTL ? 'order-2 text-right' : 'order-1 text-left'} transition-transform duration-700 translate-x-0`}>
+              <h2 className="text-2xl md:text-3xl font-bold text-charcoal mb-4 md:mb-6">
+                {isRTL ? 'هبات أيست' : 'Hebat East'}
+              </h2>
+              <p className="text-gray-600 mb-4 md:mb-6">
+                {t('about-paragraph-1')}
+              </p>
+              <p className="text-gray-600 mb-4 md:mb-8">
+                {t('about-paragraph-2')}
+              </p>
+              <Link 
+                to="/about"
+                className="inline-block bg-gold text-white px-5 py-2 md:px-6 md:py-3 rounded-md hover:bg-gold-dark transition-colors duration-300"
+              >
+                {isRTL ? 'اقرأ المزيد عنا' : 'Read More About Us'}
+              </Link>
+            </div>
+            <div className={`${isRTL ? 'order-1' : 'order-2'} transition-transform duration-700 translate-x-0`}>
+              <div className="relative">
+                <LazyImage 
+                  src="https://images.unsplash.com/photo-1565538420870-da08ff96a207?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" 
+                  alt="Luxury Chandelier" 
+                  className="rounded-lg shadow-xl w-full h-auto"
+                />
+                <div className="absolute -bottom-5 -right-5 w-16 h-16 md:w-24 md:h-24 gold-gradient rounded-lg z-10"></div>
+                <div className="absolute -top-5 -left-5 w-16 h-16 md:w-24 md:h-24 border-4 border-gold rounded-lg z-10"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Gallery Preview Section */}
+      <section className="py-16 md:py-20 bg-gray-50" ref={galleryRef}>
+        <div className="container-custom mx-auto">
+          <div className={`text-center mb-10 md:mb-16 ${isRTL ? 'rtl' : ''}`}>
+            <h2 className={`text-2xl md:text-3xl font-bold text-charcoal mb-3 md:mb-4`}>
+              {t('section-gallery-title')}
+            </h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              {t('section-gallery-subtitle')}
+            </p>
+          </div>
+
+          <Carousel
+            opts={{ loop: true }}
+            className="w-full max-w-5xl mx-auto px-4"
+          >
+            <CarouselContent>
+              {/* Gallery Images */}
+              <CarouselItem className="md:basis-1/2 lg:basis-1/3">
+                <div className="overflow-hidden rounded-lg shadow-lg group h-48 md:h-64 relative">
+                  <LazyImage 
+                    src="https://images.unsplash.com/photo-1565538420870-da08ff96a207?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" 
+                    alt="Luxury Chandelier 1" 
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                </div>
+              </CarouselItem>
+              
+              <CarouselItem className="md:basis-1/2 lg:basis-1/3">
+                <div className="overflow-hidden rounded-lg shadow-lg group h-48 md:h-64 relative">
+                  <LazyImage 
+                    src="https://images.unsplash.com/photo-1540932239986-30128078f3c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1687&q=80" 
+                    alt="Luxury Chandelier 2" 
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                </div>
+              </CarouselItem>
+              
+              <CarouselItem className="md:basis-1/2 lg:basis-1/3">
+                <div className="overflow-hidden rounded-lg shadow-lg group h-48 md:h-64 relative">
+                  <LazyImage 
+                    src="https://images.unsplash.com/photo-1556020685-ae41abfc9365?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80" 
+                    alt="Luxury Chandelier 3" 
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                </div>
+              </CarouselItem>
+            </CarouselContent>
+            
+            <div className="hidden md:block">
+              <CarouselPrevious className="left-0 bg-white/80 hover:bg-gold hover:text-white border-none" />
+              <CarouselNext className="right-0 bg-white/80 hover:bg-gold hover:text-white border-none" />
+            </div>
+          </Carousel>
+
+          <div className="text-center mt-10">
+            <Link 
+              to="/gallery"
+              className="inline-block bg-transparent border-2 border-gold text-gold px-5 py-2 md:px-6 md:py-3 rounded-md hover:bg-gold hover:text-white transition-colors duration-300"
+            >
+              {isRTL ? 'استكشاف المعرض' : 'Explore Gallery'}
+            </Link>
+          </div>
+        </div>
+      </section>
 
       {/* Services Section */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-16 md:py-20 bg-white" ref={servicesRef}>
         <div className="container-custom mx-auto">
-          <div className={`text-center mb-16 ${isRTL ? 'rtl' : ''}`}>
-            <h2 className={`text-3xl md:text-4xl font-bold text-charcoal mb-4 animate-fade-in`}>
+          <div className={`text-center mb-10 md:mb-16 ${isRTL ? 'rtl' : ''}`}>
+            <h2 className={`text-2xl md:text-3xl font-bold text-charcoal mb-3 md:mb-4`}>
               {t('section-services-title')}
             </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto animate-fade-in" style={{animationDelay: '0.2s'}}>
+            <p className="text-gray-600 max-w-2xl mx-auto">
               {t('section-services-subtitle')}
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             {/* Service Card 1 */}
-            <div className="animate-fade-in" style={{animationDelay: '0.3s'}}>
+            <div>
               <ServiceCard
                 title={t('service-chandelier-title')}
                 description={t('service-chandelier-desc')}
@@ -62,7 +230,7 @@ const Index = () => {
             </div>
 
             {/* Service Card 2 */}
-            <div className="animate-fade-in" style={{animationDelay: '0.4s'}}>
+            <div>
               <ServiceCard
                 title={t('service-consultation-title')}
                 description={t('service-consultation-desc')}
@@ -72,7 +240,7 @@ const Index = () => {
             </div>
 
             {/* Service Card 3 */}
-            <div className="animate-fade-in" style={{animationDelay: '0.5s'}}>
+            <div>
               <ServiceCard
                 title={t('service-maintenance-title')}
                 description={t('service-maintenance-desc')}
@@ -82,10 +250,10 @@ const Index = () => {
             </div>
           </div>
 
-          <div className="text-center mt-12">
+          <div className="text-center mt-10">
             <Link 
               to="/services"
-              className="inline-block bg-transparent border-2 border-gold text-gold px-6 py-3 rounded-md hover:bg-gold hover:text-white transition-colors duration-300"
+              className="inline-block bg-transparent border-2 border-gold text-gold px-5 py-2 md:px-6 md:py-3 rounded-md hover:bg-gold hover:text-white transition-colors duration-300"
             >
               {isRTL ? 'عرض جميع الخدمات' : 'View All Services'}
             </Link>
@@ -93,136 +261,67 @@ const Index = () => {
         </div>
       </section>
 
-      {/* About Section */}
-      <section className="py-20">
-        <div className="container-custom mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div className={`${isRTL ? 'order-2 text-right' : 'order-1 text-left'} animate-fade-in`}>
-              <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-6">
-                {t('section-about-title')}
-              </h2>
-              <p className="text-gray-600 mb-6">
-                {t('about-paragraph-1')}
-              </p>
-              <p className="text-gray-600 mb-8">
-                {t('about-paragraph-2')}
-              </p>
-              <Link 
-                to="/about"
-                className="inline-block bg-gold text-white px-6 py-3 rounded-md hover:bg-gold-dark transition-colors duration-300"
-              >
-                {isRTL ? 'اقرأ المزيد عنا' : 'Read More About Us'}
-              </Link>
-            </div>
-            <div className={`${isRTL ? 'order-1' : 'order-2'} animate-fade-in`} style={{animationDelay: '0.2s'}}>
-              <div className="relative">
-                <img 
-                  src="https://images.unsplash.com/photo-1565538420870-da08ff96a207?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" 
-                  alt="Luxury Chandelier" 
-                  className="rounded-lg shadow-xl w-full h-auto"
-                />
-                <div className="absolute -bottom-5 -right-5 w-24 h-24 gold-gradient rounded-lg z-10"></div>
-                <div className="absolute -top-5 -left-5 w-24 h-24 border-4 border-gold rounded-lg z-10"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Gallery Preview Section */}
-      <section className="py-20 bg-gray-50">
-        <div className="container-custom mx-auto">
-          <div className={`text-center mb-16 ${isRTL ? 'rtl' : ''}`}>
-            <h2 className={`text-3xl md:text-4xl font-bold text-charcoal mb-4 animate-fade-in`}>
-              {t('section-gallery-title')}
-            </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto animate-fade-in" style={{animationDelay: '0.2s'}}>
-              {t('section-gallery-subtitle')}
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in" style={{animationDelay: '0.3s'}}>
-            {/* Gallery Image 1 */}
-            <div className="overflow-hidden rounded-lg shadow-lg group">
-              <img 
-                src="https://images.unsplash.com/photo-1565538420870-da08ff96a207?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" 
-                alt="Luxury Chandelier 1" 
-                className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110"
-              />
-            </div>
-            
-            {/* Gallery Image 2 */}
-            <div className="overflow-hidden rounded-lg shadow-lg group">
-              <img 
-                src="https://images.unsplash.com/photo-1540932239986-30128078f3c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1687&q=80" 
-                alt="Luxury Chandelier 2" 
-                className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110"
-              />
-            </div>
-            
-            {/* Gallery Image 3 */}
-            <div className="overflow-hidden rounded-lg shadow-lg group">
-              <img 
-                src="https://images.unsplash.com/photo-1556020685-ae41abfc9365?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80" 
-                alt="Luxury Chandelier 3" 
-                className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110"
-              />
-            </div>
-          </div>
-
-          <div className="text-center mt-12">
-            <Link 
-              to="/gallery"
-              className="inline-block bg-transparent border-2 border-gold text-gold px-6 py-3 rounded-md hover:bg-gold hover:text-white transition-colors duration-300"
-            >
-              {isRTL ? 'استكشاف المعرض' : 'Explore Gallery'}
-            </Link>
-          </div>
-        </div>
-      </section>
-
       {/* Testimonials Section */}
-      <section className="py-20">
+      <section className="py-16 md:py-20 bg-gray-50" ref={testimonialsRef}>
         <div className="container-custom mx-auto">
-          <div className={`text-center mb-16 ${isRTL ? 'rtl' : ''}`}>
-            <h2 className={`text-3xl md:text-4xl font-bold text-charcoal mb-4 animate-fade-in`}>
+          <div className={`text-center mb-10 md:mb-16 ${isRTL ? 'rtl' : ''}`}>
+            <h2 className={`text-2xl md:text-3xl font-bold text-charcoal mb-3 md:mb-4`}>
               {t('section-testimonials-title')}
             </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto animate-fade-in" style={{animationDelay: '0.2s'}}>
+            <p className="text-gray-600 max-w-2xl mx-auto">
               {t('section-testimonials-subtitle')}
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* Testimonial 1 */}
-            <div className="animate-fade-in" style={{animationDelay: '0.3s'}}>
-              <TestimonialCard
-                name={isRTL ? "محمد العمري" : "Mohammed Al-Amri"}
-                role={isRTL ? "مالك فندق" : "Hotel Owner"}
-                text={isRTL 
-                  ? "تم تركيب أكثر من 15 ثريا في فندقنا. كانت الجودة استثنائية والخدمة احترافية للغاية. أوصي بشدة بخدماتهم."
-                  : "They installed more than 15 chandeliers in our hotel. The quality was exceptional and the service was highly professional. I strongly recommend their services."}
-                isRTL={isRTL}
-              />
-            </div>
+          <Carousel className="w-full max-w-4xl mx-auto px-4">
+            <CarouselContent>
+              {/* Testimonial 1 */}
+              <CarouselItem className="md:basis-1/2">
+                <TestimonialCard
+                  name={isRTL ? "محمد العمري" : "Mohammed Al-Amri"}
+                  role={isRTL ? "مالك فندق" : "Hotel Owner"}
+                  text={isRTL 
+                    ? "تم تركيب أكثر من 15 ثريا في فندقنا. كانت الجودة استثنائية والخدمة احترافية للغاية. أوصي بشدة بخدماتهم."
+                    : "They installed more than 15 chandeliers in our hotel. The quality was exceptional and the service was highly professional. I strongly recommend their services."}
+                  isRTL={isRTL}
+                />
+              </CarouselItem>
 
-            {/* Testimonial 2 */}
-            <div className="animate-fade-in" style={{animationDelay: '0.4s'}}>
-              <TestimonialCard
-                name={isRTL ? "سارة الفيصل" : "Sarah Al-Faisal"}
-                role={isRTL ? "مصممة داخلية" : "Interior Designer"}
-                text={isRTL 
-                  ? "أتعامل معهم في كل مشاريعي. يقدمون ثريات فاخرة بتصاميم فريدة وخدمة تركيب محترفة. شريك موثوق للمشاريع الراقية."
-                  : "I work with them on all my projects. They provide luxury chandeliers with unique designs and professional installation service. A trusted partner for upscale projects."}
-                isRTL={isRTL}
-              />
+              {/* Testimonial 2 */}
+              <CarouselItem className="md:basis-1/2">
+                <TestimonialCard
+                  name={isRTL ? "سارة الفيصل" : "Sarah Al-Faisal"}
+                  role={isRTL ? "مصممة داخلية" : "Interior Designer"}
+                  text={isRTL 
+                    ? "أتعامل معهم في كل مشاريعي. يقدمون ثريات فاخرة بتصاميم فريدة وخدمة تركيب محترفة. شريك موثوق للمشاريع الراقية."
+                    : "I work with them on all my projects. They provide luxury chandeliers with unique designs and professional installation service. A trusted partner for upscale projects."}
+                  isRTL={isRTL}
+                />
+              </CarouselItem>
+              
+              {/* Testimonial 3 */}
+              <CarouselItem className="md:basis-1/2">
+                <TestimonialCard
+                  name={isRTL ? "خالد العتيبي" : "Khalid Al-Otaibi"}
+                  role={isRTL ? "صاحب قصر" : "Palace Owner"}
+                  text={isRTL 
+                    ? "ثريات استثنائية وخدمة لا مثيل لها. قاموا بتصميم وتركيب الثريات في جميع أنحاء القصر بدقة واحترافية عالية."
+                    : "Exceptional chandeliers and unmatched service. They designed and installed chandeliers throughout the palace with precision and high professionalism."}
+                  isRTL={isRTL}
+                />
+              </CarouselItem>
+            </CarouselContent>
+            
+            <div className="hidden md:block">
+              <CarouselPrevious className="left-0 bg-white/80 hover:bg-gold hover:text-white border-none" />
+              <CarouselNext className="right-0 bg-white/80 hover:bg-gold hover:text-white border-none" />
             </div>
-          </div>
+          </Carousel>
 
-          <div className="text-center mt-12">
+          <div className="text-center mt-10">
             <Link 
               to="/testimonials"
-              className="inline-block bg-transparent border-2 border-gold text-gold px-6 py-3 rounded-md hover:bg-gold hover:text-white transition-colors duration-300"
+              className="inline-block bg-transparent border-2 border-gold text-gold px-5 py-2 md:px-6 md:py-3 rounded-md hover:bg-gold hover:text-white transition-colors duration-300"
             >
               {isRTL ? 'المزيد من آراء العملاء' : 'More Testimonials'}
             </Link>
@@ -230,21 +329,111 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Contact Preview Section */}
+      <section className="py-16 md:py-20" ref={contactRef}>
+        <div className="container-custom mx-auto px-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+            {/* Map */}
+            <div className="h-64 md:h-80 bg-gray-200 rounded-lg overflow-hidden shadow-md">
+              <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d231266.62604899142!2d46.570471272217775!3d24.77546410361956!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e2f03890d489399%3A0xba974d1c98e79fd5!2sRiyadh%20Saudi%20Arabia!5e0!3m2!1sen!2sus!4v1705674871373!5m2!1sen!2sus" 
+                width="100%" 
+                height="100%" 
+                style={{ border: 0 }}
+                allowFullScreen
+                loading="lazy"
+                title="Hebat East Location"
+              ></iframe>
+            </div>
+            
+            {/* Contact Info */}
+            <div className={`${isRTL ? 'text-right' : 'text-left'}`}>
+              <h2 className="text-2xl md:text-3xl font-bold text-charcoal mb-4">
+                {isRTL ? 'تواصل معنا' : 'Contact Us'}
+              </h2>
+              <p className="text-gray-600 mb-6">
+                {isRTL 
+                  ? 'نسعد بتواصلكم معنا للاستفسار عن منتجاتنا أو خدماتنا. فريقنا جاهز للرد على استفساراتكم.'
+                  : 'We would be happy to hear from you regarding our products or services. Our team is ready to answer your inquiries.'}
+              </p>
+              
+              <div className="space-y-4 mb-6">
+                <div className={`flex items-start gap-3 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                  <div className="text-gold bg-gold/10 p-2 rounded-full mt-1">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M3 5C3 3.89543 3.89543 3 5 3H8.27924C8.70967 3 9.09181 3.27543 9.22792 3.68377L10.7257 8.17721C10.8831 8.64932 10.7086 9.16531 10.3001 9.45574L8.8627 10.4592C8.56809 10.6611 8.43786 11.0218 8.55611 11.3452C9.24922 13.231 10.7822 14.7639 12.668 15.457C12.9914 15.5753 13.352 15.445 13.5539 15.1504L14.5574 13.713C14.8478 13.3045 15.3638 13.1301 15.8359 13.2874L20.3294 14.7852C20.7377 14.9213 21.0132 15.3034 21.0132 15.7338V19C21.0132 20.1046 20.1177 21 19.0132 21H18C9.71573 21 3 14.2843 3 6V5Z" stroke="#D4AF37" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <p className="font-medium text-charcoal">
+                      {isRTL ? 'رقم الهاتف' : 'Phone Number'}
+                    </p>
+                    <p className="text-gray-600">+966 50 000 0000</p>
+                  </div>
+                </div>
+                
+                <div className={`flex items-start gap-3 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                  <div className="text-gold bg-gold/10 p-2 rounded-full mt-1">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M3 8L10.8906 13.2604C11.5624 13.7083 12.4376 13.7083 13.1094 13.2604L21 8M5 19H19C20.1046 19 21 18.1046 21 17V7C21 5.89543 20.1046 5 19 5H5C3.89543 5 3 5.89543 3 7V17C3 18.1046 3.89543 19 5 19Z" stroke="#D4AF37" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <p className="font-medium text-charcoal">
+                      {isRTL ? 'البريد الإلكتروني' : 'Email Address'}
+                    </p>
+                    <p className="text-gray-600">info@hebateast.com</p>
+                  </div>
+                </div>
+                
+                <div className={`flex items-start gap-3 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                  <div className="text-gold bg-gold/10 p-2 rounded-full mt-1">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M17.6569 16.6569C16.7202 17.5935 14.7616 19.5521 13.4138 20.8999C12.6327 21.681 11.3677 21.6814 10.5866 20.9003C9.26234 19.576 7.34159 17.6553 6.34315 16.6569C3.21895 13.5327 3.21895 8.46734 6.34315 5.34315C9.46734 2.21895 14.5327 2.21895 17.6569 5.34315C20.781 8.46734 20.781 13.5327 17.6569 16.6569Z" stroke="#D4AF37" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M15 11C15 12.6569 13.6569 14 12 14C10.3431 14 9 12.6569 9 11C9 9.34315 10.3431 8 12 8C13.6569 8 15 9.34315 15 11Z" stroke="#D4AF37" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <p className="font-medium text-charcoal">
+                      {isRTL ? 'العنوان' : 'Address'}
+                    </p>
+                    <p className="text-gray-600">
+                      {isRTL 
+                        ? 'شارع الملك فهد، الرياض، المملكة العربية السعودية'
+                        : 'King Fahd Road, Riyadh, Saudi Arabia'}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="mt-8">
+                <Link 
+                  to="/contact"
+                  className="inline-block bg-gold text-white px-5 py-2 md:px-6 md:py-3 rounded-md hover:bg-gold-dark transition-colors duration-300"
+                >
+                  {isRTL ? 'اتصل بنا الآن' : 'Contact Us Now'}
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
-      <section className="py-20 bg-charcoal text-white">
-        <div className="container-custom mx-auto text-center">
-          <h2 className={`text-3xl md:text-4xl font-bold mb-4 animate-fade-in`}>
+      <section className="py-12 md:py-20 bg-charcoal text-white">
+        <div className="container-custom mx-auto text-center px-4">
+          <h2 className={`text-2xl md:text-3xl lg:text-4xl font-bold mb-4`}>
             {isRTL ? 'جاهز لتحويل مساحتك؟' : 'Ready to Transform Your Space?'}
           </h2>
-          <p className="text-gray-300 max-w-2xl mx-auto mb-8 animate-fade-in" style={{animationDelay: '0.2s'}}>
+          <p className="text-gray-300 max-w-2xl mx-auto mb-8">
             {isRTL 
               ? 'تواصل معنا اليوم للحصول على استشارة مجانية ولنبدأ رحلتك نحو إضاءة فاخرة تليق بمساحتك.'
               : 'Contact us today for a free consultation and let\'s start your journey towards luxury lighting that your space deserves.'}
           </p>
-          <div className="animate-fade-in" style={{animationDelay: '0.3s'}}>
+          <div>
             <Link 
               to="/contact"
-              className="inline-block bg-gold text-white px-8 py-4 rounded-md hover:bg-gold-dark transition-colors duration-300"
+              className="inline-block bg-gold text-white px-6 py-3 md:px-8 md:py-4 rounded-md hover:bg-gold-dark transition-colors duration-300"
             >
               {isRTL ? 'تواصل معنا الآن' : 'Contact Us Now'}
             </Link>

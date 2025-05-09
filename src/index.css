@@ -159,7 +159,7 @@
   
   /* Better mobile spacing */
   .mobile-py {
-    @apply py-12 md:py-20;
+    @apply py-10 md:py-16 lg:py-20;
   }
   
   .mobile-px {
@@ -169,6 +169,22 @@
   /* Card styles for consistent UI */
   .content-card {
     @apply bg-white rounded-lg shadow-md p-6 transition-all duration-300 hover:shadow-lg;
+  }
+  
+  /* Scroll-based animations */
+  .animate-reveal {
+    animation: reveal 0.8s ease-out forwards;
+  }
+  
+  @keyframes reveal {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 }
 
