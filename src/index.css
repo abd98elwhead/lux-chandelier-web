@@ -133,6 +133,43 @@
   .image-container img {
     @apply w-full h-full object-cover transition-transform duration-500 hover:scale-105;
   }
+  
+  /* Mobile optimizations */
+  @media (max-width: 640px) {
+    .section-title {
+      @apply text-2xl mb-4;
+    }
+    
+    .container-custom {
+      @apply px-4;
+    }
+  }
+  
+  /* Tablet optimizations */
+  @media (min-width: 641px) and (max-width: 1024px) {
+    .container-custom {
+      @apply px-6;
+    }
+  }
+  
+  /* Improved form controls for mobile */
+  input, textarea, select {
+    @apply w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-gold focus:border-transparent;
+  }
+  
+  /* Better mobile spacing */
+  .mobile-py {
+    @apply py-12 md:py-20;
+  }
+  
+  .mobile-px {
+    @apply px-4 md:px-6;
+  }
+  
+  /* Card styles for consistent UI */
+  .content-card {
+    @apply bg-white rounded-lg shadow-md p-6 transition-all duration-300 hover:shadow-lg;
+  }
 }
 
 /* Transition delays for animation sequences */
@@ -224,4 +261,18 @@
 .en {
   font-family: 'Playfair Display', serif;
   line-height: 1.5;
+}
+
+/* Mobile navigation improvements */
+@media (max-width: 768px) {
+  .mobile-menu-item {
+    @apply block w-full text-center py-3 border-b border-gray-100;
+  }
+}
+
+/* Improved button accessibility for mobile */
+@media (max-width: 640px) {
+  button, .button, a.button, .btn, a.btn {
+    @apply min-h-[44px] min-w-[44px]; /* For better touch targets */
+  }
 }

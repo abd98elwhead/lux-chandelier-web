@@ -3,12 +3,14 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import LanguageSwitcher from './LanguageSwitcher';
 import { useLanguage } from '../context/LanguageContext';
+import { useIsMobile } from '../hooks/use-mobile';
 
 const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { t, isRTL } = useLanguage();
   const location = useLocation();
+  const isMobile = useIsMobile();
 
   const navItems = [
     { name: t('home'), path: '/' },
@@ -41,14 +43,19 @@ const Navbar: React.FC = () => {
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white shadow-md py-2' : 'bg-transparent py-4'}`}>
       <div className="container-custom mx-auto flex justify-between items-center">
-        <Link to="/" className="text-charcoal hover:text-gold transition-colors duration-300">
+        <Link to="/" className="text-charcoal hover:text-gold transition-colors duration-300 flex items-center gap-2">
+          <img 
+            src="/lovable-uploads/777e2494-28cc-4648-9bb5-cba7d8613829.png" 
+            alt={isRTL ? 'هبات أيست' : 'Hebat East'} 
+            className="w-10 h-10 object-contain"
+          />
           <h1 className={`text-2xl font-bold ${isRTL ? 'font-tajawal' : 'font-playfair'}`}>
-            {isRTL ? 'الثريات الفاخرة' : 'Luxury Chandeliers'}
+            {isRTL ? 'هبات أيست' : 'Hebat East'}
           </h1>
         </Link>
 
         {/* Desktop Navigation */}
-        <div className={`hidden lg:flex items-center space-x-6 ${isRTL ? 'space-x-reverse' : ''}`}>
+        <div className={`hidden lg:flex items-center ${isRTL ? 'space-x-reverse' : ''} space-x-6`}>
           {navItems.map((item) => (
             <Link
               key={item.path}
@@ -105,6 +112,16 @@ const Navbar: React.FC = () => {
         } lg:hidden`}
       >
         <div className="p-4">
+          <div className="flex items-center gap-2 mb-6">
+            <img 
+              src="/lovable-uploads/777e2494-28cc-4648-9bb5-cba7d8613829.png" 
+              alt={isRTL ? 'هبات أيست' : 'Hebat East'} 
+              className="w-8 h-8 object-contain"
+            />
+            <h2 className={`text-xl font-bold ${isRTL ? 'font-tajawal' : 'font-playfair'}`}>
+              {isRTL ? 'هبات أيست' : 'Hebat East'}
+            </h2>
+          </div>
           <button
             onClick={() => setMobileMenuOpen(false)}
             className="text-charcoal hover:text-gold transition-colors duration-300 mb-8 block mx-auto"

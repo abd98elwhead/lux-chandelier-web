@@ -2,10 +2,12 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
+import { useIsMobile } from '../hooks/use-mobile';
 
 const HeroSection: React.FC = () => {
   const { t, isRTL } = useLanguage();
   const [isVisible, setIsVisible] = useState(false);
+  const isMobile = useIsMobile();
   
   useEffect(() => {
     // Trigger animation after component mounts
@@ -25,35 +27,42 @@ const HeroSection: React.FC = () => {
 
       {/* Content */}
       <div className="container-custom mx-auto relative z-10 pt-24 md:pt-32 px-4 md:px-6">
-        <div className={`max-w-3xl ${isRTL ? 'text-right' : 'text-left'}`}>
+        <div className={`max-w-3xl ${isRTL ? 'text-right' : 'text-left'} mx-auto md:mx-0`}>
+          <img 
+            src="/lovable-uploads/777e2494-28cc-4648-9bb5-cba7d8613829.png" 
+            alt={isRTL ? 'هبات أيست' : 'Hebat East'} 
+            className={`w-16 h-16 md:w-24 md:h-24 object-contain mb-4 transition-all duration-1000 ease-out transform ${
+              isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-90'
+            } ${isMobile ? 'mx-auto' : isRTL ? 'mr-0 ml-auto' : 'ml-0'}`}
+          />
           <h1 
-            className={`text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 transition-all duration-1000 ease-out transform ${
+            className={`text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-4 transition-all duration-1000 ease-out transform ${
               isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-            }`}
+            } ${isMobile ? 'text-center' : ''}`}
           >
             {t('hero-title')}
           </h1>
           <p 
-            className={`text-xl md:text-2xl text-gray-200 mb-8 transition-all duration-1000 ease-out delay-300 transform ${
+            className={`text-lg md:text-2xl text-gray-200 mb-8 transition-all duration-1000 ease-out delay-300 transform ${
               isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-            }`}
+            } ${isMobile ? 'text-center' : ''}`}
           >
             {t('hero-subtitle')}
           </p>
           <div 
-            className={`flex flex-wrap gap-4 ${isRTL ? 'justify-end' : 'justify-start'} transition-all duration-1000 ease-out delay-500 transform ${
+            className={`flex flex-wrap gap-4 ${isMobile ? 'justify-center' : isRTL ? 'justify-end' : 'justify-start'} transition-all duration-1000 ease-out delay-500 transform ${
               isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
             }`}
           >
             <Link 
               to="/gallery" 
-              className="bg-gold text-white px-6 py-3 rounded-md hover:bg-gold-dark transition-all duration-300 inline-block transform hover:scale-105"
+              className="bg-gold text-white px-6 py-3 rounded-md hover:bg-gold-dark transition-all duration-300 inline-block transform hover:scale-105 hover:shadow-lg"
             >
               {t('cta-view')}
             </Link>
             <Link 
               to="/contact" 
-              className="bg-transparent border-2 border-white text-white px-6 py-3 rounded-md hover:bg-white hover:text-charcoal transition-all duration-300 inline-block transform hover:scale-105"
+              className="bg-transparent border-2 border-white text-white px-6 py-3 rounded-md hover:bg-white hover:text-charcoal transition-all duration-300 inline-block transform hover:scale-105 hover:shadow-lg"
             >
               {t('cta-consultation')}
             </Link>

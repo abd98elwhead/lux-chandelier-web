@@ -2,10 +2,12 @@
 import React, { useEffect, useState } from 'react';
 import { ArrowUp } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
+import { useIsMobile } from '../hooks/use-mobile';
 
 const BackToTopButton: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
   const { isRTL } = useLanguage();
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     const toggleVisibility = () => {
@@ -31,13 +33,13 @@ const BackToTopButton: React.FC = () => {
   return (
     <button
       onClick={scrollToTop}
-      className={`fixed bottom-6 ${isRTL ? 'left-6' : 'right-6'} z-40 bg-gold hover:bg-gold-dark text-white p-3 rounded-full shadow-lg transform transition-all duration-300 ${
+      className={`fixed bottom-6 ${isRTL ? (isMobile ? 'left-4' : 'left-6') : (isMobile ? 'right-4' : 'right-6')} z-40 bg-gold hover:bg-gold-dark text-white p-3 rounded-full shadow-lg transform transition-all duration-300 ${
         isVisible ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'
       }`}
       aria-label={isRTL ? 'العودة إلى الأعلى' : 'Back to top'}
       title={isRTL ? 'العودة إلى الأعلى' : 'Back to top'}
     >
-      <ArrowUp size={20} />
+      <ArrowUp size={isMobile ? 16 : 20} />
     </button>
   );
 };
