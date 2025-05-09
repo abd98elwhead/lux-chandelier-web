@@ -32,6 +32,10 @@ const translations: Record<string, Record<Language, string>> = {
     en: 'Gallery',
     ar: 'معرض الصور'
   },
+  'our-collection': {
+    en: 'Our Collection',
+    ar: 'تشكيلة أعمالنا'
+  },
   'testimonials': {
     en: 'Testimonials',
     ar: 'آراء العملاء'
@@ -105,8 +109,8 @@ const translations: Record<string, Record<Language, string>> = {
     ar: 'مع سنوات من الخبرة والشغف بالتميز، يقدم فريقنا المزيج المثالي من الفن والوظائف العملية لكل مشروع.'
   },
   'section-gallery-title': {
-    en: 'Our Gallery',
-    ar: 'معرض أعمالنا'
+    en: 'Our Collection',
+    ar: 'تشكيلة أعمالنا'
   },
   'section-gallery-subtitle': {
     en: 'Explore our finest installations',

@@ -1,1 +1,12 @@
+
 /* Remove default App.css styles that might conflict with our Tailwind setup */
+
+/* Beautiful gradient backgrounds for English back-to-top button */
+.back-to-top-gradient {
+  background: linear-gradient(135deg, #9b87f5 0%, #7E69AB 50%, #1EAEDB 100%);
+  box-shadow: 0 4px 15px rgba(123, 105, 215, 0.4);
+}
+
+.back-to-top-gradient:hover {
+  background: linear-gradient(135deg, #8B5CF6 0%, #D946EF 50%, #F97316 100%);
+}
