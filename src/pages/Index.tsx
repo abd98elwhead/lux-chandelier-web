@@ -26,7 +26,7 @@ const Index = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
     
-    // Intersection Observer for scroll animations
+    // Intersection Observer for scroll animations - with smoother transitions
     const observerOptions = {
       threshold: 0.15,
       rootMargin: '0px 0px -50px 0px'
@@ -35,7 +35,8 @@ const Index = () => {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          entry.target.classList.add('animate-reveal');
+          // Add a slower, smoother animation class
+          entry.target.classList.add('animate-reveal-smooth');
           observer.unobserve(entry.target);
         }
       });
@@ -81,78 +82,116 @@ const Index = () => {
         <div className="container-custom mx-auto">
           <div className={`text-center mb-10 md:mb-16 ${isRTL ? 'rtl' : ''}`}>
             <h2 className={`text-2xl md:text-3xl font-bold text-charcoal mb-3 md:mb-4`}>
-              {t('section-gallery-title')}
+              {isRTL ? 'تشكيلة أعمالنا' : 'Our Collection'}
             </h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              {t('section-gallery-subtitle')}
+              {isRTL 
+                ? 'تصفح مجموعتنا المميزة من الثريات والإضاءات الفاخرة المناسبة لكل الأذواق والديكورات'
+                : 'Browse our distinguished collection of chandeliers and luxury lighting suitable for all tastes and decorations'}
             </p>
           </div>
 
-          <Carousel
-            opts={{ loop: true, align: "start" }}
-            className="w-full max-w-5xl mx-auto px-4"
-          >
-            <CarouselContent>
-              {/* Product Cards with prices */}
-              <CarouselItem className="md:basis-1/2 lg:basis-1/3">
-                <ProductCard 
-                  title={isRTL ? "ثريا كريستال فاخرة" : "Luxury Crystal Chandelier"}
-                  price="12,500 SAR"
-                  images={[
-                    "https://images.unsplash.com/photo-1565538420870-da08ff96a207?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-                    "https://images.unsplash.com/photo-1540932239986-30128078f3c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1687&q=80"
-                  ]}
-                  isRTL={isRTL}
-                />
-              </CarouselItem>
+          {/* Show static cards on desktop, carousel only on mobile */}
+          {isMobile ? (
+            <Carousel
+              opts={{ loop: true, align: "start" }}
+              className="w-full max-w-5xl mx-auto px-4"
+              autoPlay={true}
+              interval={5000}
+            >
+              <CarouselContent>
+                <CarouselItem className="basis-full">
+                  <ProductCard 
+                    title={isRTL ? "ثريا كريستال فاخرة" : "Luxury Crystal Chandelier"}
+                    price="12,500 SAR"
+                    images={[
+                      "https://images.unsplash.com/photo-1565538420870-da08ff96a207?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+                      "https://images.unsplash.com/photo-1540932239986-30128078f3c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1687&q=80"
+                    ]}
+                    isRTL={isRTL}
+                  />
+                </CarouselItem>
+                
+                <CarouselItem className="basis-full">
+                  <ProductCard 
+                    title={isRTL ? "ثريا كلاسيكية" : "Classic Chandelier"}
+                    price="8,750 SAR"
+                    images={[
+                      "https://images.unsplash.com/photo-1540932239986-30128078f3c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1687&q=80",
+                      "https://images.unsplash.com/photo-1556020685-ae41abfc9365?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80"
+                    ]}
+                    isRTL={isRTL}
+                  />
+                </CarouselItem>
+                
+                <CarouselItem className="basis-full">
+                  <ProductCard 
+                    title={isRTL ? "ثريا مودرن" : "Modern Chandelier"}
+                    price="9,200 SAR"
+                    images={[
+                      "https://images.unsplash.com/photo-1556020685-ae41abfc9365?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80",
+                      "https://images.unsplash.com/photo-1565538420870-da08ff96a207?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
+                    ]}
+                    isRTL={isRTL}
+                  />
+                </CarouselItem>
+              </CarouselContent>
               
-              <CarouselItem className="md:basis-1/2 lg:basis-1/3">
-                <ProductCard 
-                  title={isRTL ? "ثريا كلاسيكية" : "Classic Chandelier"}
-                  price="8,750 SAR"
-                  images={[
-                    "https://images.unsplash.com/photo-1540932239986-30128078f3c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1687&q=80",
-                    "https://images.unsplash.com/photo-1556020685-ae41abfc9365?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80"
-                  ]}
-                  isRTL={isRTL}
-                />
-              </CarouselItem>
+              <div className="flex justify-center mt-4">
+                <CarouselPrevious className="mx-1 bg-white/80 hover:bg-gold hover:text-white border-none" />
+                <CarouselNext className="mx-1 bg-white/80 hover:bg-gold hover:text-white border-none" />
+              </div>
+            </Carousel>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 px-4 max-w-5xl mx-auto">
+              <ProductCard 
+                title={isRTL ? "ثريا كريستال فاخرة" : "Luxury Crystal Chandelier"}
+                price="12,500 SAR"
+                images={[
+                  "https://images.unsplash.com/photo-1565538420870-da08ff96a207?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+                  "https://images.unsplash.com/photo-1540932239986-30128078f3c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1687&q=80"
+                ]}
+                isRTL={isRTL}
+              />
               
-              <CarouselItem className="md:basis-1/2 lg:basis-1/3">
-                <ProductCard 
-                  title={isRTL ? "ثريا مودرن" : "Modern Chandelier"}
-                  price="9,200 SAR"
-                  images={[
-                    "https://images.unsplash.com/photo-1556020685-ae41abfc9365?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80",
-                    "https://images.unsplash.com/photo-1565538420870-da08ff96a207?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
-                  ]}
-                  isRTL={isRTL}
-                />
-              </CarouselItem>
-            </CarouselContent>
-            
-            <div className="hidden md:block">
-              <CarouselPrevious className="left-0 bg-white/80 hover:bg-gold hover:text-white border-none" />
-              <CarouselNext className="right-0 bg-white/80 hover:bg-gold hover:text-white border-none" />
+              <ProductCard 
+                title={isRTL ? "ثريا كلاسيكية" : "Classic Chandelier"}
+                price="8,750 SAR"
+                images={[
+                  "https://images.unsplash.com/photo-1540932239986-30128078f3c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1687&q=80",
+                  "https://images.unsplash.com/photo-1556020685-ae41abfc9365?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80"
+                ]}
+                isRTL={isRTL}
+              />
+              
+              <ProductCard 
+                title={isRTL ? "ثريا مودرن" : "Modern Chandelier"}
+                price="9,200 SAR"
+                images={[
+                  "https://images.unsplash.com/photo-1556020685-ae41abfc9365?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80",
+                  "https://images.unsplash.com/photo-1565538420870-da08ff96a207?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
+                ]}
+                isRTL={isRTL}
+              />
             </div>
-          </Carousel>
+          )}
 
           <div className="text-center mt-10">
             <Link 
               to="/gallery"
               className="inline-block bg-transparent border-2 border-gold text-gold px-5 py-2 md:px-6 md:py-3 rounded-md hover:bg-gold hover:text-white transition-colors duration-300"
             >
-              {isRTL ? 'استكشاف المعرض' : 'Explore Gallery'}
+              {isRTL ? 'عرض كافة التشكيلات' : 'View All Collections'}
             </Link>
           </div>
         </div>
       </section>
       
-      {/* Our Partners Section - Updated to match the reference */}
+      {/* Our Partners Section */}
       <section className="py-12 md:py-16 bg-white" ref={partnersRef}>
         <div className="container-custom mx-auto px-4">
           <div className={`text-center mb-8 md:mb-12 ${isRTL ? 'rtl' : ''}`}>
-            <h2 className={`text-2xl md:text-3xl font-bold text-charcoal mb-3 transition-opacity duration-700 opacity-0 animate-reveal`}>
+            <h2 className={`text-2xl md:text-3xl font-bold text-charcoal mb-3 transition-opacity duration-700`}>
               {isRTL ? 'شركاؤنا واعتماداتنا' : 'Our Partners & Certifications'}
             </h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
@@ -215,7 +254,7 @@ const Index = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-            {/* Service Card 1 */}
+            {/* Service Cards */}
             <div>
               <ServiceCard
                 title={t('service-chandelier-title')}
@@ -225,7 +264,6 @@ const Index = () => {
               />
             </div>
 
-            {/* Service Card 2 */}
             <div>
               <ServiceCard
                 title={t('service-consultation-title')}
@@ -235,7 +273,6 @@ const Index = () => {
               />
             </div>
 
-            {/* Service Card 3 */}
             <div>
               <ServiceCard
                 title={t('service-maintenance-title')}
@@ -257,7 +294,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Testimonials Section - Enhanced with images */}
+      {/* Testimonials Section */}
       <section className="py-16 md:py-20 bg-gray-50" ref={testimonialsRef}>
         <div className="container-custom mx-auto">
           <div className={`text-center mb-10 md:mb-16 ${isRTL ? 'rtl' : ''}`}>
@@ -269,7 +306,12 @@ const Index = () => {
             </p>
           </div>
 
-          <Carousel className="w-full max-w-4xl mx-auto px-4" opts={{ loop: true, align: "start", dragFree: true, containScroll: "trimSnaps" }}>
+          <Carousel 
+            className="w-full max-w-4xl mx-auto px-4" 
+            opts={{ loop: true, align: "start", dragFree: true, containScroll: "trimSnaps" }}
+            autoPlay={isMobile}
+            interval={5000}
+          >
             <CarouselContent>
               {/* Testimonial 1 */}
               <CarouselItem className="md:basis-1/2">
@@ -328,14 +370,14 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Contact Preview Section */}
+      {/* Contact Preview Section with updated map location */}
       <section className="py-16 md:py-20" ref={contactRef}>
         <div className="container-custom mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-            {/* Map */}
+            {/* Map - Updated to Jeddah location */}
             <div className="h-64 md:h-80 bg-gray-200 rounded-lg overflow-hidden shadow-md">
               <iframe 
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d231266.62604899142!2d46.570471272217775!3d24.77546410361956!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e2f03890d489399%3A0xba974d1c98e79fd5!2sRiyadh%20Saudi%20Arabia!5e0!3m2!1sen!2sus!4v1705674871373!5m2!1sen!2sus" 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3709.727960801672!2d39.18417487554701!3d21.584524972944244!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x15c3da620ae118db%3A0x728c9ddbe8a1d62e!2sKing%20Faisal%20Rd%2C%20Al%20Andalus%2C%20Jeddah%20Saudi%20Arabia!5e0!3m2!1sen!2sus!4v1706071232031!5m2!1sen!2sus" 
                 width="100%" 
                 height="100%" 
                 style={{ border: 0 }}
@@ -398,8 +440,8 @@ const Index = () => {
                     </p>
                     <p className="text-gray-600">
                       {isRTL 
-                        ? 'شارع الملك فهد، الرياض، المملكة العربية السعودية'
-                        : 'King Fahd Road, Riyadh, Saudi Arabia'}
+                        ? 'شارع الملك فيصل، جدة، المملكة العربية السعودية'
+                        : 'King Faisal Road, Jeddah, Saudi Arabia'}
                     </p>
                   </div>
                 </div>

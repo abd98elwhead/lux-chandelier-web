@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import LazyImage from './LazyImage';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
@@ -17,6 +17,18 @@ const ProductCard: React.FC<ProductCardProps> = ({
   isRTL = false 
 }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
+
+  // Auto cycle through images when not hovered
+  useEffect(() => {
+    if (images.length <= 1 || isHovered) return;
+    
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prev) => (prev + 1) % images.length);
+    }, 4000);
+    
+    return () => clearInterval(interval);
+  }, [images.length, isHovered]);
 
   const nextImage = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -29,13 +41,17 @@ const ProductCard: React.FC<ProductCardProps> = ({
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl group h-full flex flex-col">
+    <div 
+      className="bg-white rounded-lg shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl group h-full flex flex-col"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
       {/* Image container with navigation */}
       <div className="relative h-48 md:h-64 overflow-hidden">
         <LazyImage 
           src={images[currentImageIndex]} 
           alt={title} 
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
         />
         
         {/* Image Navigation - Only visible on hover or on mobile */}

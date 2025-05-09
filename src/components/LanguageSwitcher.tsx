@@ -8,6 +8,14 @@ const LanguageSwitcher: React.FC = () => {
 
   const toggleLanguage = () => {
     setLanguage(language === 'en' ? 'ar' : 'en');
+    
+    // Add a smooth transition for the whole page
+    document.documentElement.style.transition = 'opacity 0.5s ease';
+    document.documentElement.style.opacity = '0.8';
+    
+    setTimeout(() => {
+      document.documentElement.style.opacity = '1';
+    }, 500);
   };
 
   const buttonText = language === 'en' ? 'العربية' : 'English';

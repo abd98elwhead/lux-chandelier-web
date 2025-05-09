@@ -69,6 +69,11 @@
   [dir="ltr"] [lang="ar"] {
     display: none;
   }
+  
+  /* Smooth page transitions */
+  #root > main {
+    @apply transition-opacity duration-500;
+  }
 }
 
 @layer components {
@@ -171,9 +176,14 @@
     @apply bg-white rounded-lg shadow-md p-6 transition-all duration-300 hover:shadow-lg;
   }
   
-  /* Scroll-based animations */
+  /* Scroll-based animations - Updated with smoother timing */
   .animate-reveal {
     animation: reveal 0.8s ease-out forwards;
+  }
+  
+  /* Smoother reveal animation with longer duration */
+  .animate-reveal-smooth {
+    animation: reveal-smooth 1.2s ease-out forwards;
   }
   
   @keyframes reveal {
@@ -182,6 +192,21 @@
       transform: translateY(20px);
     }
     to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Smoother animation with better easing */
+  @keyframes reveal-smooth {
+    0% {
+      opacity: 0;
+      transform: translateY(15px);
+    }
+    50% {
+      opacity: 0.7;
+    }
+    100% {
       opacity: 1;
       transform: translateY(0);
     }
@@ -209,27 +234,30 @@
   animation-delay: 500ms;
 }
 
-/* Fade in animation */
+/* Smoother fade in animation */
 @keyframes fadeIn {
-  from {
+  0% {
     opacity: 0;
     transform: translateY(10px);
   }
-  to {
+  70% {
+    opacity: 0.7;
+  }
+  100% {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
 .fade-in {
-  animation: fadeIn 0.5s ease forwards;
+  animation: fadeIn 0.8s ease forwards;
 }
 
-/* Slide in animations */
+/* Smoother slide in animations */
 @keyframes slideInLeft {
   from {
     opacity: 0;
-    transform: translateX(-20px);
+    transform: translateX(-15px);
   }
   to {
     opacity: 1;
@@ -240,7 +268,7 @@
 @keyframes slideInRight {
   from {
     opacity: 0;
-    transform: translateX(20px);
+    transform: translateX(15px);
   }
   to {
     opacity: 1;
@@ -249,18 +277,18 @@
 }
 
 .slide-in-left {
-  animation: slideInLeft 0.5s ease forwards;
+  animation: slideInLeft 0.8s ease forwards;
 }
 
 .slide-in-right {
-  animation: slideInRight 0.5s ease forwards;
+  animation: slideInRight 0.8s ease forwards;
 }
 
 /* More robust fade-in animations */
 .fade-in-up {
   opacity: 0;
   transform: translateY(20px);
-  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
 }
 
 .fade-in-up.visible {

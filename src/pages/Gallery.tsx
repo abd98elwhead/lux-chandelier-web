@@ -140,12 +140,12 @@ const Gallery = () => {
 
   return (
     <div className="pt-24">
-      {/* Header */}
+      {/* Header - Updated title */}
       <section className="bg-charcoal text-white py-20">
         <div className="container-custom mx-auto">
           <div className={`max-w-3xl ${isRTL ? 'text-right' : 'text-left'}`}>
             <h1 className="text-4xl md:text-5xl font-bold mb-6 animate-fade-in">
-              {t('gallery')}
+              {isRTL ? 'تشكيلة أعمالنا' : 'Our Collection'}
             </h1>
             <p className="text-xl text-gray-300 animate-fade-in" style={{animationDelay: '0.2s'}}>
               {isRTL
@@ -192,7 +192,7 @@ const Gallery = () => {
                     <img
                       src={item.imageUrl}
                       alt={isRTL ? item.titleAR : item.titleEN}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                     />
                   </div>
                   <div className={`p-6 ${isRTL ? 'text-right' : 'text-left'}`}>
