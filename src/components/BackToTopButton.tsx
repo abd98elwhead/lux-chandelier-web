@@ -50,7 +50,7 @@ const BackToTopButton: React.FC = () => {
         onClick={scrollToTop}
         className={`fixed bottom-6 ${isRTL ? 'left-6' : 'right-6'} z-40 p-2 sm:p-3 rounded-full shadow-lg transform transition-all duration-500 ${
           isVisible ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0 pointer-events-none'
-        } back-to-top-gradient text-white`}
+        } bg-gradient-to-r from-gold to-amber-500 text-white`}
         aria-label="Back to top"
         title="Back to top"
       >

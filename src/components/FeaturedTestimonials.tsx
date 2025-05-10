@@ -1,14 +1,18 @@
 
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import TestimonialCard from './TestimonialCard';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { useIsMobile } from '../hooks/use-mobile';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const FeaturedTestimonials: React.FC = () => {
   const { t, isRTL, language } = useLanguage();
   const isMobile = useIsMobile();
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [dragging, setDragging] = useState(false);
+  const carouselRef = useRef<HTMLDivElement>(null);
   
   const testimonials = [
     {
@@ -63,6 +67,126 @@ const FeaturedTestimonials: React.FC = () => {
     }
   ];
 
+  // For mobile, let's create a specialized testimonial slider
+  const MobileTestimonialSlider = () => {
+    const [activeIndex, setActiveIndex] = useState(0);
+    const [touchStart, setTouchStart] = useState(0);
+    const [touchEnd, setTouchEnd] = useState(0);
+    const [isTransitioning, setIsTransitioning] = useState(false);
+    
+    const handleTouchStart = (e: React.TouchEvent) => {
+      setTouchStart(e.targetTouches[0].clientX);
+    };
+    
+    const handleTouchMove = (e: React.TouchEvent) => {
+      setTouchEnd(e.targetTouches[0].clientX);
+    };
+    
+    const handleTouchEnd = () => {
+      if (!touchStart || !touchEnd) return;
+      
+      const distance = touchStart - touchEnd;
+      const isLeftSwipe = distance > 50;
+      const isRightSwipe = distance < -50;
+      
+      if (!isTransitioning) {
+        if (isLeftSwipe) {
+          goToNextSlide();
+        }
+        if (isRightSwipe) {
+          goToPrevSlide();
+        }
+      }
+      
+      setTouchStart(0);
+      setTouchEnd(0);
+    };
+    
+    const goToNextSlide = () => {
+      if (isTransitioning) return;
+      setIsTransitioning(true);
+      setActiveIndex((current) => (current + 1) % testimonials.length);
+      setTimeout(() => setIsTransitioning(false), 500);
+    };
+
+    const goToPrevSlide = () => {
+      if (isTransitioning) return;
+      setIsTransitioning(true);
+      setActiveIndex((current) => (current - 1 + testimonials.length) % testimonials.length);
+      setTimeout(() => setIsTransitioning(false), 500);
+    };
+    
+    return (
+      <div className="px-4 relative">
+        <div 
+          className="overflow-hidden rounded-lg"
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
+          <div 
+            className="flex transition-transform duration-500 ease-out"
+            style={{ transform: `translateX(${isRTL ? activeIndex * 100 : -activeIndex * 100}%)` }}
+          >
+            {testimonials.map((testimonial) => (
+              <div key={testimonial.id} className="w-full flex-shrink-0 px-1">
+                <TestimonialCard
+                  name={language === 'ar' ? testimonial.nameAr : testimonial.nameEn}
+                  role={language === 'ar' ? testimonial.roleAr : testimonial.roleEn}
+                  text={language === 'ar' ? testimonial.textAr : testimonial.textEn}
+                  image={testimonial.image}
+                  isRTL={isRTL}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+        
+        {/* Controls - Nicer mobile controls */}
+        <div className="flex justify-between mt-6 mb-2 px-2">
+          <button
+            onClick={goToPrevSlide}
+            className={`w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center ${isRTL ? 'ml-auto' : 'mr-auto'}`}
+            disabled={isTransitioning}
+            aria-label={isRTL ? "التالي" : "Previous"}
+          >
+            {isRTL ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
+          </button>
+          <button
+            onClick={goToNextSlide}
+            className={`w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center ${isRTL ? 'mr-auto' : 'ml-auto'}`}
+            disabled={isTransitioning}
+            aria-label={isRTL ? "السابق" : "Next"}
+          >
+            {isRTL ? <ChevronLeft size={20} /> : <ChevronRight size={20} />}
+          </button>
+        </div>
+        
+        {/* Improved Indicators */}
+        <div className="flex justify-center mt-2 gap-1.5">
+          {testimonials.map((_, index) => (
+            <button
+              key={`indicator-${index}`}
+              onClick={() => {
+                if (!isTransitioning) {
+                  setIsTransitioning(true);
+                  setActiveIndex(index);
+                  setTimeout(() => setIsTransitioning(false), 500);
+                }
+              }}
+              className={`transition-all duration-300 rounded-full ${
+                index === activeIndex 
+                  ? 'w-6 h-2 bg-gold' // Elongated active indicator
+                  : 'w-2 h-2 bg-gray-300'
+              }`}
+              aria-label={`Go to testimonial ${index + 1}`}
+            />
+          ))}
+        </div>
+      </div>
+    );
+  };
+
   return (
     <section className="py-16 md:py-20 bg-gray-50">
       <div className="container-custom mx-auto">
@@ -75,41 +199,41 @@ const FeaturedTestimonials: React.FC = () => {
           </p>
         </div>
 
-        <Carousel 
-          className="w-full max-w-5xl mx-auto px-4" 
-          opts={{ 
-            loop: true, 
-            align: "start", 
-            dragFree: true, 
-            containScroll: "trimSnaps" 
-          }}
-          autoPlay={true}
-          interval={5000}
-        >
-          <CarouselContent>
-            {testimonials.map((testimonial) => (
-              <CarouselItem key={testimonial.id} className={`${isMobile ? 'basis-full' : 'md:basis-1/2 lg:basis-1/3'} pl-4`}>
-                <TestimonialCard
-                  name={language === 'ar' ? testimonial.nameAr : testimonial.nameEn}
-                  role={language === 'ar' ? testimonial.roleAr : testimonial.roleEn}
-                  text={language === 'ar' ? testimonial.textAr : testimonial.textEn}
-                  image={testimonial.image}
-                  isRTL={isRTL}
-                />
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          
-          <div className="hidden md:flex md:justify-between md:w-full md:absolute md:top-1/2 md:-translate-y-1/2 md:px-4">
-            <CarouselPrevious className="relative -translate-y-1/2 left-0 bg-white/80 hover:bg-gold hover:text-white border-none" />
-            <CarouselNext className="relative -translate-y-1/2 right-0 bg-white/80 hover:bg-gold hover:text-white border-none" />
-          </div>
-          
-          <div className="flex justify-center mt-4 md:hidden">
-            <CarouselPrevious className="mx-1 bg-white/80 hover:bg-gold hover:text-white border-none" />
-            <CarouselNext className="mx-1 bg-white/80 hover:bg-gold hover:text-white border-none" />
-          </div>
-        </Carousel>
+        {isMobile ? (
+          <MobileTestimonialSlider />
+        ) : (
+          <Carousel 
+            ref={carouselRef}
+            className="w-full max-w-5xl mx-auto px-4" 
+            opts={{ 
+              loop: true, 
+              align: "start", 
+              dragFree: true,
+              containScroll: "trimSnaps" 
+            }}
+            autoPlay={true}
+            interval={5000}
+          >
+            <CarouselContent>
+              {testimonials.map((testimonial) => (
+                <CarouselItem key={testimonial.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
+                  <TestimonialCard
+                    name={language === 'ar' ? testimonial.nameAr : testimonial.nameEn}
+                    role={language === 'ar' ? testimonial.roleAr : testimonial.roleEn}
+                    text={language === 'ar' ? testimonial.textAr : testimonial.textEn}
+                    image={testimonial.image}
+                    isRTL={isRTL}
+                  />
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            
+            <div className="hidden md:flex md:justify-between md:w-full md:absolute md:top-1/2 md:-translate-y-1/2 md:px-4">
+              <CarouselPrevious className="relative -translate-y-1/2 left-0 bg-white/80 hover:bg-gold hover:text-white border-none" />
+              <CarouselNext className="relative -translate-y-1/2 right-0 bg-white/80 hover:bg-gold hover:text-white border-none" />
+            </div>
+          </Carousel>
+        )}
 
         <div className="text-center mt-10">
           <Link 

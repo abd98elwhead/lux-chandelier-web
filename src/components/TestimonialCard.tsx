@@ -21,16 +21,16 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({
   const isMobile = useIsMobile();
   
   return (
-    <div className="bg-white p-5 md:p-8 rounded-lg shadow-lg elegant-shadow h-full">
-      <div className={`flex flex-col ${isRTL ? 'text-right' : 'text-left'}`}>
+    <div className="bg-white p-5 md:p-8 rounded-lg shadow-lg elegant-shadow h-full flex flex-col transition-all duration-300 hover:shadow-xl transform hover:-translate-y-1">
+      <div className={`flex flex-col ${isRTL ? 'text-right' : 'text-left'} h-full`}>
         <div className="mb-3 md:mb-4">
-          <svg width="24" height="24" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg width="24" height="24" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-gold">
             <path d="M10.667 13.3334H5.33366C5.33366 13.3334 5.33366 8.00004 10.667 8.00004M10.667 8.00004C10.667 8.00004 10.667 5.33337 8.00033 6.66671C5.33366 8.00004 5.33366 13.3334 5.33366 13.3334C5.33366 17.3334 10.667 17.3334 10.667 13.3334V8.00004ZM26.667 13.3334H21.3337C21.3337 13.3334 21.3337 8.00004 26.667 8.00004M26.667 8.00004C26.667 8.00004 26.667 5.33337 24.0003 6.66671C21.3337 8.00004 21.3337 13.3334 21.3337 13.3334C21.3337 17.3334 26.667 17.3334 26.667 13.3334V8.00004Z" stroke="#D4AF37" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         </div>
-        <p className="text-gray-600 mb-4 md:mb-6 text-sm md:text-base">{text}</p>
-        <div className={`flex items-center ${isRTL ? 'justify-end' : ''} mt-auto`}>
-          <div className="w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden border-2 border-gold">
+        <p className="text-gray-600 mb-4 md:mb-6 text-sm md:text-base flex-grow">{text}</p>
+        <div className={`flex items-center ${isRTL ? 'justify-end' : ''} mt-4`}>
+          <div className="w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden border-2 border-gold shadow-sm">
             {image ? (
               <LazyImage src={image} alt={name} className="w-full h-full object-cover" />
             ) : (
