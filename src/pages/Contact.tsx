@@ -40,7 +40,7 @@ const Contact = () => {
 
               <div className="space-y-6">
                 {/* Address */}
-                <div className="flex items-start">
+                <div className={`flex items-start ${isRTL ? 'flex-row-reverse' : ''}`}>
                   <div className={`mt-1 text-gold ${isRTL ? 'ml-4' : 'mr-4'}`}>
                     <svg 
                       xmlns="http://www.w3.org/2000/svg" 
@@ -76,7 +76,7 @@ const Contact = () => {
                 </div>
 
                 {/* Phone */}
-                <div className="flex items-start">
+                <div className={`flex items-start ${isRTL ? 'flex-row-reverse' : ''}`}>
                   <div className={`mt-1 text-gold ${isRTL ? 'ml-4' : 'mr-4'}`}>
                     <svg 
                       xmlns="http://www.w3.org/2000/svg" 
@@ -107,7 +107,7 @@ const Contact = () => {
                 </div>
 
                 {/* Email */}
-                <div className="flex items-start">
+                <div className={`flex items-start ${isRTL ? 'flex-row-reverse' : ''}`}>
                   <div className={`mt-1 text-gold ${isRTL ? 'ml-4' : 'mr-4'}`}>
                     <svg 
                       xmlns="http://www.w3.org/2000/svg" 
@@ -138,7 +138,7 @@ const Contact = () => {
                 </div>
 
                 {/* Working Hours */}
-                <div className="flex items-start">
+                <div className={`flex items-start ${isRTL ? 'flex-row-reverse' : ''}`}>
                   <div className={`mt-1 text-gold ${isRTL ? 'ml-4' : 'mr-4'}`}>
                     <svg 
                       xmlns="http://www.w3.org/2000/svg" 

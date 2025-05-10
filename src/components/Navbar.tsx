@@ -71,12 +71,12 @@ const Navbar: React.FC = () => {
           </div>
         </div>
 
-        {/* Mobile Navigation */}
-        <div className="lg:hidden flex items-center">
+        {/* Mobile Navigation - Reorganized for RTL/LTR support */}
+        <div className={`lg:hidden flex items-center ${isRTL ? 'flex-row-reverse' : ''}`}>
           <LanguageSwitcher />
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="ml-4 text-charcoal hover:text-gold transition-colors duration-300"
+            className={`${isRTL ? 'mr-4' : 'ml-4'} text-charcoal hover:text-gold transition-colors duration-300`}
             aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
           >
             <svg
