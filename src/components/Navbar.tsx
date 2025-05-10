@@ -6,7 +6,7 @@ import { useLanguage } from '../context/LanguageContext';
 import { useIsMobile } from '../hooks/use-mobile';
 
 const Navbar: React.FC = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(true); // Set to true by default
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { t, isRTL } = useLanguage();
   const location = useLocation();
@@ -26,7 +26,8 @@ const Navbar: React.FC = () => {
       if (window.scrollY > 50) {
         setIsScrolled(true);
       } else {
-        setIsScrolled(false);
+        // Only remove the background when not at the top of the home page
+        setIsScrolled(location.pathname === '/' ? true : false);
       }
     };
 
@@ -34,7 +35,7 @@ const Navbar: React.FC = () => {
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, []);
+  }, [location.pathname]);
 
   useEffect(() => {
     setMobileMenuOpen(false);
